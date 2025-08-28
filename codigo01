@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define TAM 10
+#define NUM_NAVIOS 5
+#define NUM_HABILIDADES 3
+
+char tabuleiro[TAM][TAM];
+int navios[NUM_NAVIOS][2];
+int habilidades[NUM_HABILIDADES][2];
+
+void inicializarTabuleiro() {
+    for (int i = 0; i < TAM; i++)
+        for (int j = 0; j < TAM; j++)
+            tabuleiro[i][j] = '~'; // água
+}
+
+void posicionarNavios() {
+    srand(time(NULL));
+    for (int i = 0; i < NUM_NAVIOS; i++) {
+        int x = rand() % TAM;
+        int y = rand() % TAM;
+        navios[i][0] = x;
+        navios[i][1] = y;
+        tabuleiro[x][y] = 'N'; // navio
+    }
+}
+
+void posicionarHabilidades() {
+    for (int i = 0; i < NUM_HABILIDADES; i++) {
+        int x = rand() % TAM;
+        int y = rand() % TAM;
+        habilidades[i][0] = x;
+        habilidades[i][1] = y;
+        tabuleiro[x][y] = 'H'; // habilidade especial
+    }
+}
+
+void mostrarTabuleiro() {
+    printf("  ");
+    for (int i = 0; i < TAM; i++) printf("%d ", i);
+    printf("\n");
+    for (int i = 0; i < TAM; i++) {
+        printf("%d ", i);
+        for (int j = 0; j < TAM; j++) {
+            if (tabuleiro[i][j] == 'N' || tabuleiro[i][j] == 'H')
+                printf("~ "); // oculta navios e habilidades
+            else
+                printf("%c ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void atacar(int x, int y) {
+    if (tabuleiro[x][y] == 'N') {
+        printf("💥 Acertou um navio!\n");
+        tabuleiro[x][y] = 'X';
+    } else if (tabuleiro[x][y] == 'H') {
+        printf("✨ Habilidade ativada! Revelando área...\n");
+        for (int i = x - 1; i <= x + 1; i++)
+            for (int j = y - 1; j <= y + 1; j++)
+                if (i >= 0 && i < TAM && j >= 0 && j < TAM)
+                    printf("(%d,%d): %c\n", i, j, tabuleiro[i][j]);
+        tabuleiro[x][y] = '*';
+    } else {
+        printf("🌊 Água...\n");
+        tabuleiro[x][y] = 'O';
+    }
+}
+
+int main() {
+    int x, y;
+    inicializarTabuleiro();
+    posicionarNavios();
+    posicionarHabilidades();
+
+    printf("🎮 Bem-vindo ao Batalha Naval!\n");
+
+    for (int turno = 0; turno < 10; turno++) {
+        mostrarTabuleiro();
+        printf("Digite coordenadas para atacar (x y): ");
+        scanf("%d %d", &x, &y);
+        atacar(x, y);
+    }
+
+    printf("🏁 Fim de jogo!\n");
+    return 0;
+}
