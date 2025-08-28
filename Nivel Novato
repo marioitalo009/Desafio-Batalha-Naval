@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+#define TAM 10
+#define TAM_NAVIO 4
+
+int main() {
+    char tabuleiro[TAM][TAM];
+
+    // Inicializa o tabuleiro com água (~)
+    for (int i = 0; i < TAM; i++)
+        for (int j = 0; j < TAM; j++)
+            tabuleiro[i][j] = '~';
+
+    // 📥 Entrada manual: posição inicial dos navios
+    int navio_vertical_x = 2, navio_vertical_y = 3;
+    int navio_horizontal_x = 6, navio_horizontal_y = 1;
+
+    // Posiciona navio vertical
+    printf("🚢 Navio Vertical (tamanho %d):\n", TAM_NAVIO);
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int x = navio_vertical_x + i;
+        int y = navio_vertical_y;
+        tabuleiro[x][y] = 'V';
+        printf("Parte %d: (%d, %d)\n", i + 1, x, y);
+    }
+
+    // Posiciona navio horizontal
+    printf("\n🚢 Navio Horizontal (tamanho %d):\n", TAM_NAVIO);
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int x = navio_horizontal_x;
+        int y = navio_horizontal_y + i;
+        tabuleiro[x][y] = 'H';
+        printf("Parte %d: (%d, %d)\n", i + 1, x, y);
+    }
+
+    // Exibe o tabuleiro
+    printf("\n🗺️ Tabuleiro:\n");
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            printf("%c ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
